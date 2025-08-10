@@ -22,7 +22,7 @@ st.dataframe(sales_by_month)
 
 st.line_chart(sales_by_month, y="Sales")
 
-st.write("## Your additions")
+st.write("## Custom additions from here on..")
 
 selected_category = st.selectbox(
     "Select a Category:",
