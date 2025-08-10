@@ -22,21 +22,23 @@ st.dataframe(sales_by_month)
 
 st.line_chart(sales_by_month, y="Sales")
 
-st.write("## Custom additions from here on..")
+st.write("## Your additions")
 
 selected_category = st.selectbox(
     "Select a Category:",
-    options=df["Category"].unique()
+    options=[None] + list(df["Category"].unique())
 )
 
-filtered_subcategories = df[df["Category"] == selected_category]["Sub_Category"].unique()
-selected_subcategories = st.multiselect(
-    f"Select Sub-Categories from {selected_category}:",
-    options=filtered_subcategories,
-    default=filtered_subcategories
-)
+if selected_category:
+    filtered_subcategories = df[df["Category"] == selected_category]["Sub_Category"].unique()
+    selected_subcategories = st.multiselect(
+        f"Select Sub-Categories from {selected_category}:",
+        options=filtered_subcategories
+    )
+else:
+    selected_subcategories = []
 
-if selected_subcategories:
+if selected_category and selected_subcategories:
     filtered_df = df[
         (df["Category"] == selected_category) & 
         (df["Sub_Category"].isin(selected_subcategories))
@@ -73,4 +75,7 @@ if selected_subcategories:
             delta=f"{margin_delta:.2f}%"
         )
 else:
-    st.write("Please select at least one sub-category to view the analysis.")
+    if not selected_category:
+        st.write("Please select a category first.")
+    elif not selected_subcategories:
+        st.write("Please select at least one sub-category to view the analysis.")
